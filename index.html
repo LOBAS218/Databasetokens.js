@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BebyShina</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --pink-glow: #ff007f;
+            --pink-soft: #ff85c1;
+            --bg-glass: rgba(0, 0, 0, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Video Background Fix */
+        #bg-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            object-fit: cover;
+            filter: brightness(0.4);
+        }
+
+        /* Container Card */
+        .card {
+            background: var(--bg-glass);
+            width: 360px;
+            max-height: 85vh;
+            padding: 25px;
+            border-radius: 30px;
+            border: 1px solid var(--pink-glow);
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            overflow-y: auto;
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        .card::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+
+        /* Profile Section */
+        .pfp-container {
+            cursor: pointer;
+            margin-bottom: 10px;
+            display: inline-block;
+            transition: all 0.5s ease;
+        }
+
+        .pfp-container:hover { transform: scale(1.1) rotate(5deg); }
+
+        .pfp-container img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid var(--pink-glow);
+            box-shadow: 0 0 15px var(--pink-glow);
+            object-fit: cover;
+        }
+
+        h2 { color: white; font-weight: 600; letter-spacing: 1px; }
+        .username { color: var(--pink-soft); font-size: 0.85rem; margin-bottom: 20px; }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: 0.4s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 0, 127, 0.2);
+            border-bottom: 3px solid var(--pink-glow);
+            color: var(--pink-glow);
+        }
+
+        /* Content Animations */
+        .content-area {
+            display: none;
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        .content-area.active { display: block; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        /* Buttons & Boxes */
+        .link-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.07);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .link-box:hover {
+            background: rgba(255, 0, 127, 0.15);
+            transform: translateX(10px);
+            box-shadow: inset 0 0 10px var(--pink-glow);
+        }
+
+        .link-box i {
+            font-size: 1.4rem;
+            margin-right: 15px;
+            color: var(--pink-glow);
+            text-shadow: 0 0 5px var(--pink-glow);
+        }
+
+        /* Service Item specifically for WA */
+        .service-link {
+            display: block;
+            text-align: left;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 4px solid var(--pink-glow);
+            margin-bottom: 10px;
+            border-radius: 0 15px 15px 0;
+            color: #efefef;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .service-link:hover {
+            background: var(--pink-glow);
+            color: white;
+            padding-left: 25px;
+        }
+
+        /* E-Wallet Section */
+        .payment-card {
+            background: #111;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 15px;
+            border: 1px dashed var(--pink-glow);
+        }
+
+        .qris-img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            filter: grayscale(0.2) contrast(1.1);
+        }
+
+        .payment-info {
+            font-size: 0.85rem;
+            color: white;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        /* Sticky Footer */
+        .footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .footer a {
+            color: white;
+            font-size: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .footer a:hover {
+            color: var(--pink-glow);
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://files.catbox.moe/dre1ia.mp4" type="video/mp4">
+    </video>
+
+    <div class="card">
+        <div class="pfp-container" onclick="toggleUI()">
+            <img src="https://files.catbox.moe/bbt7mh.jpg" alt="Profile">
+        </div>
+        
+        <h2 id="main-title">Click to Reveal</h2>
+        <p class="username">@shinbebyy</p>
+
+        <div id="wrapper-ui" style="display: none;">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('about', this)">ABOUT ME</button>
+                <button class="tab-btn" onclick="switchTab('service', this)">LAYANAN</button>
+            </div>
+
+            <div id="about" class="content-area active">
+                <a href="https://www.tiktok.com/@jalbebbby" class="link-box">
+                    <i class="fab fa-tiktok"></i>
+                    <span>TikTok Official</span>
+                </a>
+                <a href="https://t.me/LucieLefebvr" class="link-box">
+                    <i class="fab fa-telegram"></i>
+                    <span>Telegram Admin</span>
+                </a>
+                <a href="https://wa.me/6285880099709" class="link-box">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp Personal</span>
+                </a>
+                <a href="https://chat.whatsapp.com/CPL8wuyUPOICm5ji9lfthi" class="link-box">
+                    <i class="fas fa-users"></i>
+                    <span>Grup YuriLovers</span>
+                </a>
+            </div>
+
+            <div id="service" class="content-area">
+                <a href="https://wa.me/6285880099709?text=Halo,+saya+ingin+sewa+bot" class="service-link">
+                    <i class="fas fa-robot"></i> &nbsp;🔰 Sewa Bot WhatsApp
+                </a>
+                <a href="https://wa.me/6285880099709?text=Halo,+saya+ingin+beli+script+bot" class="service-link">
+                    <i class="fas fa-code"></i> &nbsp;🔰 Script Bot MD
+                </a>
+
+                <div class="payment-card">
+                    <p style="color: var(--pink-glow); font-weight: bold; margin-bottom: 10px;">E-WALLET PAYMENT</p>
+                    <img src="https://files.catbox.moe/eikxme.jpg" class="qris-img" alt="QRIS">
+                    
+                    <div class="payment-info">
+                        <span>DANA:</span>
+                        <span style="color: var(--pink-soft);">085880099709</span>
+                    </div>
+                    <div class="payment-info">
+                        <span>GOPAY:</span>
+                        <span style="color: var(--pink-soft);">085880099709</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <a href="https://wa.me/6285880099709"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://t.me/LucieLefebvr"><i class="fab fa-telegram"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleUI() {
+            const wrapper = document.getElementById('wrapper-ui');
+            const title = document.getElementById('main-title');
+            if (wrapper.style.display === 'none') {
+                wrapper.style.display = 'block';
+                title.innerText = "BebyShina";
+            }
+        }
+
+        function switchTab(tabId, btn) {
+            // Animasi Fade Out dulu
+            const contents = document.querySelectorAll('.content-area');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(b => b.classList.remove('active'));
+
+            // Aktifkan tab baru
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>
